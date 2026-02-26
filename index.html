@@ -2,68 +2,98 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BTC Goal</title>
+<title>Transmission Pending</title>
 
 <style>
 body {
-    background: white;
-    font-family: Arial, sans-serif;
+    background: black;
+    color: #00ff88;
+    font-family: "Courier New", monospace;
     text-align: center;
-    padding-top: 60px;
+    padding-top: 80px;
+    transition: background 0.5s ease;
+}
+
+h1 {
+    letter-spacing: 3px;
+    font-weight: normal;
+    margin-bottom: 40px;
 }
 
 .address {
-    font-size: 16px;
+    font-size: 14px;
     word-break: break-all;
-    margin-bottom: 20px;
-}
-
-.goal {
-    margin-top: 10px;
+    opacity: 0.7;
+    margin-bottom: 30px;
 }
 
 .progress-container {
     width: 60%;
-    margin: 30px auto;
-    background: #eee;
-    height: 25px;
-    border-radius: 20px;
+    margin: 40px auto;
+    background: #111;
+    height: 8px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
     width: 0%;
-    background: black;
-    transition: width 0.6s ease;
+    background: #00ff88;
+    transition: width 1s ease;
 }
 
-.qr {
-    margin-top: 30px;
+.balance {
+    margin-top: 20px;
+    font-size: 16px;
 }
 
 .usd {
-    margin-top: 10px;
-    font-size: 14px;
-    opacity: 0.7;
+    margin-top: 5px;
+    font-size: 13px;
+    opacity: 0.5;
+}
+
+.footer {
+    margin-top: 80px;
+    font-size: 12px;
+    opacity: 0.4;
+    letter-spacing: 2px;
+}
+
+.qr {
+    margin-top: 40px;
+    opacity: 0.8;
+}
+
+.blink {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.2; }
 }
 </style>
 </head>
 <body>
 
-<h2>Bitcoin Address</h2>
-<p class="address">bc1q8f52zsffdgkxc2gk3rku2jmjzkkjzq0z8f6tvf</p>
+<h1 class="blink">I WILL RETURN SOON</h1>
 
-<h3 id="balance">Loading balance...</h3>
+<div class="address">bc1q8f52zsffdgkxc2gk3rku2jmjzkkjzq0z8f6tvf</div>
+
+<div class="balance" id="balance">Awaiting signal...</div>
 <div class="usd" id="usdValue"></div>
-<h3 class="goal">Goal: 33 BTC</h3>
 
 <div class="progress-container">
   <div class="progress-bar" id="progress"></div>
 </div>
 
 <div class="qr">
-  <img id="qrCode" width="180">
+  <img id="qrCode" width="150">
+</div>
+
+<div class="footer">
+    Transmission in progress...
 </div>
 
 <script>
@@ -87,7 +117,7 @@ async function getBalance() {
         const balanceBTC = (funded - spent) / 100000000;
 
         document.getElementById("balance").innerText =
-            "Current: " + balanceBTC.toFixed(6) + " BTC";
+            balanceBTC.toFixed(6) + " BTC received";
 
         let percent = (balanceBTC / goal) * 100;
         if (percent > 100) percent = 100;
@@ -99,19 +129,19 @@ async function getBalance() {
             "≈ $" + usd.toLocaleString(undefined, {maximumFractionDigits: 0});
 
         if (balanceBTC > lastBalance) {
-            document.body.style.background = "#f5f5f5";
-            setTimeout(() => document.body.style.background = "white", 600);
+            document.body.style.background = "#001a0f";
+            setTimeout(() => document.body.style.background = "black", 500);
         }
 
         lastBalance = balanceBTC;
 
     } catch (error) {
-        document.getElementById("balance").innerText = "Error loading balance";
+        document.getElementById("balance").innerText = "Signal lost...";
     }
 }
 
 document.getElementById("qrCode").src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + address;
+    "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + address;
 
 getBalance();
 setInterval(getBalance, 60000);
